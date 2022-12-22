@@ -1,0 +1,140 @@
+% \documentclass[rnd]{mas_proposal}
+\documentclass[thesis]{mas_proposal}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\renewcommand{\arraystretch}{1.5}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\title{Deep-Learning-Based Personalisation of Robot Behaviour for Assistive Robotics}
+\author{Michał Stolarz}
+\supervisors{Prof. Dr. Paul G. Plöger\\M.Sc. Alex Mitrevski}
+\date{January 2023}
+
+\thirdpartylogo{images/migrave.png}
+
+\begin{document}
+
+\maketitle
+
+\pagestyle{plain}
+
+\section[Introduction]{Introduction\footnote{Parts of this chapter have been published in~\cite{stolarz2022personalized,stolarz2022learningbased}}}
+
+\subsection{Motivation}
+One of the objectives of robot-assisted therapy (RAT)~\cite{esteban2017build} is increasing the autonomy of the robot that is used during therapy sessions; this has the purpose of reducing the necessary therapist interactions with the robot, while still keeping the therapist in control of the sessions at all times.
+In the context of RAT, robot programs are usually developed in such a way that they can be used generically for different individuals; however, individuals may have different reactions to specific stimuli and, depending on their concrete needs, may also benefit from therapy sessions focusing on specific aspects.
+This means that a generic RAT approach may not be optimal for effective treatment of individuals; instead, the robot should be able to adapt its behaviour to the needs of each individual and therapy session \cite{esteban2017build,scassellati2018improving,rudovic2018personalized}.
+
+The motivation behind this work is a therapy for children with Autism Spectrum Disorder (ASD). This problem is of a big relevance as in the European Union, there are over 5 million people affected by autism~\cite{deenigma2022} and it is estimated that 1 in 160 children all over the world is diagnosed with ASD~\cite{jain2020modeling}. People with ASD often have difficulties in social interaction and communication. To alleviate the effects of ASD, individualized therapies are provided. However, autistic children find robots easier to communicate with than humans~\cite{robins2006}, thus Robot-Assisted Therapies (RATs) have been being investigated. During RAT, most of the time therapists have to control the robot remotely (Wizard of Oz approach)~\cite{deenigma2022}~\cite{david2018developing,robins2017developing,rudovic2017measuring,marinoiu20183d}. Because of it, the therapist might not be able to fully focus on the therapy and react appropriately to the child's behaviour~\cite{cao2018personalized}. To reduce their workload, the autonomy of the robot has to be increased, namely it should be able to interpret a child’s behaviour and adapt its actions to the individual needs of the child~\cite{esteban2017build}.
+
+\subsection{Adaptation Techniques}
+Adaptation is possible if the robot actively learns a user model that encodes certain attributes of the user. The user model can be integrated into a robot decision-making algorithm~\cite{rossi2017user} called a behaviour model, which allows the system to choose appropriate robot reactions in response to the actions of each individual user. Personalisation refers to the adaptation of the system to the individual user over time~\cite{rossi2017user} and can be solved by using Interactive Machine Learning (IML), which involves the user in the learning loop~\cite{senft2019teaching}. IML usually makes use of \emph{learning from guidance} or \emph{learning from feedback}. Learning from guidance relies on an external supervisor (e.g. therapist), who provides expert knowledge to the system. The supervisor is able to assess the decisions of the robot before being executed, namely they are able to accept, or alternatively reject and override the suggested reaction of the robot. This solution guarantees that the system will not execute any undesirable actions during learning, but is sensitive to the mistakes of the supervising person. On the other hand, learning from feedback uses direct feedback from the user (e.g. engagement level of the user). As there is no supervising person, the robot has to explore by itself what effects its actions have. 
+
+\subsection{Problem Statement}
+The main problem during RAT for children with autism is that the therapists have to control the robot manually, which might meaningfully increase their workload. This means that there is a need for a personalised behaviour model which will increase the autonomy of the robot. The model should interpret and continuously adapt to the behaviour of the individual child under therapy, as each child might have different ASD symptoms. The therapy for children with ASD usually consists of games designed by the therapists. This means that the developed learning algorithm should be able to enable the robot to personalise the difficulty of the game activities to the individual child's skill level. Additionally, the robot should also react appropriately when interacting with the child does not go as planned. That means that the robot should prevent them from getting bored, disengaged or demotivated, by executing actions such as giving verbal motivating feedback or simple motions (e.g. waving gesture) that would draw the child’s attention back to the game.
+
+Currently, in order to enable the robot to react appropriately in various social situation during an interaction with the user, many works make use of an engagement estimator. Engagement is the feature that is often used for the development of behaviour models~\cite{senft2015sparc,senft2015human,tsiakas2018task,del2022learning}. It can be measured with the use of EEG headset~\cite{tsiakas2018task}, but an external engagement observer might be more convenient for children with ASD, as they may be overwhelmed by the sensory stimuli if they need to wear an additional device during therapy~\cite{javed2019robotic}. In the literature, several types of algorithms that estimate engagement from features obtained using the OpenFace library~\cite{baltrusaitis2018openface, jain2020modeling, kaur2019domain, karimah2021implementation}, eye gaze~\cite{khorrami2014system},  body posture~\cite{ritschel2017adapting} or visual data~\cite{mane2018engagement, del2020you} can be found. Some of these are also able to capture and classify temporal data~\cite{del2020you, karimah2021implementation}.
+
+However, the model estimating an engagement used further for decision-making process is not perfect and might introduce an additional error to the behaviour model. This is a problem of a significant impact on the robot behaviour and was mentioned in our recent work~\cite{stolarz2022learningbased}. To alleviate the impact of false predictions on the feature level we suggest to turn towards data-driven methods that will be able to use a raw sensor data instead of high-level features (e.g. engagement level) that have to be estimated separately.   
+
+
+\subsection{Topic of This R\&D Project}
+\begin{itemize}
+    \item Provide reasonably detailed description of what you intent to do in your R\&D project.
+    \item You may also discuss the challenges that you have to address.
+    \item Reflect on the profile of the reader and PLEAAAASE, tell a story here and refrain from bombarding the readers with details which they may not be able to appreciate.
+\end{itemize}
+
+\subsection{Relevance of This R\&D Project}
+\begin{itemize}
+    \item Who will benefit from the results of this R\&D project?
+    \item What are the benefits? Quantify the benefits with concrete numbers.
+ \end{itemize}
+
+\section{Related Work}
+
+\subsection{Survey of Related Work}
+\begin{itemize}
+    \item What have other people done to solve the problem?
+    \item You should reference and briefly discuss at least the ``top twelve'' related works
+\end{itemize}
+
+\subsection{Limitation and Deficits in the State of the Art}
+\begin{itemize}
+    \item List the deficits that you have discovered in the related work and explain them such that a person who is not deep into the technical details can still understand them.
+    For each deficit, provide at least two references
+    \item You should reference and briefly discuss at least the ``top twelve'' related works
+\end{itemize}
+
+\section{Problem Statement}
+\begin{itemize}
+    \item Which of the deficits are you going to solve?
+    \item What is your intended approach?
+    \item How will you compare you approach with existing approaches?
+\end{itemize}
+
+\section{Project Plan}
+
+\subsection{Work Packages}
+\emph{Planning is the replacement of randomness by error.} (Einstein). Very much like you would never start a longer journey without a detailed travel plan, you should not start a project without a carefully though out work plan. A work package is a logical decomposition of a larger piece of work into smaller parts following a ``divide and conquer" strategy. It is very specific to the problem that you are going to address. Refrain from a rather generic decomposition. If your work plan looks similar to those of your school mates, which may address completely different problems then you have not thought carefully enough about how you approach the problem. It is ok to have two generic work packages \emph{Literature Study} and \emph{Project Report}. Discuss your work packages in the ASW seminar.
+
+The bare minimum will include the following packages:
+\begin{enumerate}
+    \item[WP1] Literature Study
+    \item[WP2] ...
+    \item[WP3] ...
+    \item  ...
+    \item[WPy] Evaluation of approach and comparison with similar approaches
+    \item[WPz] Project Report
+\end{enumerate}
+
+\subsection{Milestones}
+Milestones mark the completion of a certain activity or at least a major achievement in an activity. Milestones are also decision points, where you reflect on what you have achieved and what options you have for continuing your work in case you have not achieved what was planned. Above all, milestones have to be measurable. As above, if your milestones are the same as those of your school mates, then you may not have thought carefully enough about how your project shall progress.
+\begin{enumerate}
+    \item[M1] Literature review completed and best practice identified
+    \item[M2] ...
+    \item[M3] ...
+    \item[M4] Report submission
+\end{enumerate}
+
+\subsection{Project Schedule}
+Include a Gantt chart here. It doesn't have to be detailed, but it should include the milestones you mentioned above.
+Make sure to include the writing of your report throughout the whole project, not just at the end.
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{images/rnd_deliverable_timeline}
+    \caption{My figure caption}
+    \label{fig:myfigure}
+\end{figure}
+
+\subsection{Deliverables}
+
+\subsubsection*{Minimum Viable}
+\begin{itemize}
+    \item Project results required to get a satisfying or sufficient grade.
+\end{itemize}
+
+\subsubsection*{Expected}
+\begin{itemize}
+    \item Project results required to get a good grade.
+\end{itemize}
+
+\subsubsection*{Desired}
+\begin{itemize}
+    \item Project results required to get an excellent grade.
+\end{itemize}
+
+Please note that the final grade will not only depend on the results obtained in your work, but also on how you present the results.
+
+\nocite{*}
+
+\bibliographystyle{plainnat} % Use the plainnat bibliography style
+\bibliography{bibliography.bib} % Use the bibliography.bib file as the source of references
+
+\end{document}
