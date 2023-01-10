@@ -50,9 +50,12 @@ As we discussed in~\cite{stolarz2022personalized}, there are four personalisatio
 
 \subsection{Deep Learning Personalisation Approaches}
 
+{\color{red}Note for describing the paper: the main general aim (who gains what), if faces the deficits of the previous work, approach, deficits.}
+
 \subsubsection{Social Behaviour Personalisation}
+
 \begin{itemize}
-	\item Qureshi et al~\cite{Qureshi2016} proposes a deep reinforcement learning method, called multimodal deep Q-network (based on~\cite{mnih2015human}) \cite{Qureshi2017} \cite{Qureshi2018}
+	\item Qureshi et al~\cite{Qureshi2016} made a step towards making robots more interactive while coexisting with humans. This is done by enabling the robot to continuously learn social interaction skills. For that purpose, the deep reinforcement learning (DRL) method was used, which is called Multimodal Deep Q-Network (MDQN) (based on~\cite{mnih2015human}). This is a major contribution, as the developed DRL interaction model can conduct a human-robot interaction in an uncontrolled and real environment, which is not the case for the previous works. There are two inputs for MDQN, namely grayscale and depth video frames. Based on these two streams the model learns when to perform one of the four actions, which are: \texttt{wait}, \texttt{look towards human}, \texttt{wave hand}, \texttt{handshake}. The reward function is designed such that the robot's main goal is to perform a successful handshake. Here the data generation and training phases are separated, which means that all the robot's experiences are saved in the replay memory and used for training only during the resting period. \cite{Qureshi2017} \cite{Qureshi2018}
 	\item Clark-Turner~\cite{ClarkTurner2017,Turner2018}
 	\item Romeo~\cite{Romeo2018,Romeo2019,romeo2021human}
 	\item Belo~\cite{Belo2021,Belo2022}
