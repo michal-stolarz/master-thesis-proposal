@@ -125,18 +125,19 @@ Most of the aforementioned datasets are designed for activity recognition~\cite{
 		\subcaption{}%
 		\label{subfig:right}
 	\end{subfigure}
-	\caption{Frames from one of the videos from AIR-Act2Act dataset~\cite{Ko2021} (the video depicts a scenario where the robot is supposed to bow to the elderly person who enters into the apartment)}
+	\caption{Frames (preprocessed) from one of the videos from AIR-Act2Act dataset~\cite{Ko2021} (the video depicts a scenario where the robot is supposed to bow to the elderly person who enters into the apartment)}
 	\label{fig:hoora}
 \end{figure}
 
 The requirement for using a certain dataset are recordings from the first-person perspective (the person participating in the interaction). That is why the datasets containing recordings with only the perspective of the third person (two people are interacting with each other and the robot is only an observer)~\cite{Hu2013,UT-Interaction-Data,Gemeren2016,Yun2012} are unsuitable for our application.
 
 \subsection{Tools for Data Collection}
-\begin{itemize}
-\item Simulator~\cite{Belo2021} \footnote{\url{https://github.com/JPedroRBelo/simDRLSR}}, validation tool~\cite{Belo2022} \footnote{\url{https://github.com/JPedroRBelo/validation_tool_socialdqn}}
 
-\item Real data collection:  GUI~\cite{Turner2018} \footnote{\url{https://github.com/AssistiveRoboticsUNH/deep_reinforcement_abstract_lfd}} \cite{carpio2018learning,carpio2019learning} \footnote{\url{https://github.com/AssistiveRoboticsUNH/TR-LfD}}
-\end{itemize}
+As mentioned before, the provided datasets are not suitable for training the model that would be applicable for ASD therapy. That is why during the project it will be required to collect the dataset manually or in the simulation. In both cases the data will not be collected from the individuals with authism, however the scenarios imitating an robot-conducted intervention can be replicated with people without autism (students and university staff) or with simulated users. For both cases there are available tools that can be reused in the proposed project. 
+
+First of all, the autism intervention scenarios can be simulated with the Simulator for Deep Reinforcement Learning and Social Robotics (SimDRLSR)~\cite{Belo2021}.\footnote{\url{https://github.com/JPedroRBelo/simDRLSR}} Here, the actions of the simulated humans are defined with scripts. Additionally, the robot's actions can be evaluated (whether they are socially acceptable) by human referees with a provided validation tool~\cite{Belo2022}\footnote{\url{https://github.com/JPedroRBelo/validation_tool_socialdqn}}. Although a simulation is a cheap and fast method for data collection for training a DL agent, the important features for action selection during an autism intervention are facial expressions, eye gaze and head orientation of the users~\cite{stolarz2022learningbased}, which might not be possible to reflect in the simulation.
+
+Another possibility is to collect the data manually. This requires a suitable software that would enable a researcher to control the robot, as well as appropriately organise and store the collected data. There are publicly available packages that can be used as a guideline for creating such a software~\cite{Turner2018,carpio2018learning,carpio2019learning}\footnote{\url{https://github.com/AssistiveRoboticsUNH/deep_reinforcement_abstract_lfd}}\footnote{\url{https://github.com/AssistiveRoboticsUNH/TR-LfD}}.
 
 \section{Problem Statement}
 \begin{itemize}
