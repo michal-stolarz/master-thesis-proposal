@@ -145,21 +145,29 @@ The problem that is going to be approached during the project is to develop a pe
 As we want to avoid an error provided by an additional model, such as engagement estimator (calculating high-level features for the behaviour model), we want to develop a decision-making algorithm that operates on the raw sensory data. As the conventional tabular approaches are unsuitable for that purpose~\cite{akalin2021reinforcement}, we will focus on the DL techniques.
 
 \subsection{Deficits to Be Solved}
-First of all, based on our literature search, in HRI there are no DL based solutions for both social behaviour and game difficulty personalisation. That means that existing approaches for social behaviour adaptation are not designed for conducting games with a user. Other deficits of the social behaviour personalisation are related to the used models. First of all, the DL neural networks require a big amount of data in order to converge, that is why a big number of interactions with the user is needed. Moreover, the training is computationally heavy, that is why it can not be performed continuously during a human-robot interaction~\cite{Qureshi2016,Qureshi2017,Qureshi2018,Romeo2019}. The developed models for social behaviour adaptation in many cases were trained and evaluated on the previously collected datasets~\cite{ClarkTurner2017,Romeo2018,Hijaz2021} or in the simulation~\cite{Turner2018,Belo2021,Belo2022}. The collected data is often collected in the laboratory environment (instead of the real one), which might not prepare the model for the real-life interaction~\cite{ClarkTurner2017,Turner2018,Romeo2018}. Additionally, the performance of the know solutions is not acceptable for the clinical intervention, due to the high possibility of making a mistake by the robot~\cite{ClarkTurner2017,Turner2018,Romeo2019,Hijaz2021}. This might be caused by the insufficient number of interactions with the user (not enough data) or the fact that the collected data is imbalanced (some actions are performed more often than others)~\cite{Hijaz2021}. Finally, many of the known solutions have a small action space which significantly limits the capabilities of the robot~\cite{Qureshi2016,Qureshi2017,Qureshi2018,ClarkTurner2017,Turner2018,Belo2021,Belo2022,Romeo2018,Romeo2019}.
+First of all, based on our literature search, in HRI there are no DL based solutions for both social behaviour and game difficulty personalisation. That means that existing approaches for social behaviour adaptation are not designed for conducting games with a user. Other deficits of the social behaviour personalisation are related to the used models. First of all, the DL neural networks require a big amount of data in order to converge, that is why a big number of interactions with the user is needed. Moreover, the training is computationally heavy, that is why it can not be performed continuously during a human-robot interaction~\cite{Qureshi2016,Qureshi2017,Qureshi2018,Romeo2019}. The developed models for social behaviour adaptation in many cases were trained and evaluated on the previously collected datasets~\cite{ClarkTurner2017,Romeo2018,Hijaz2021} or in the simulation~\cite{Turner2018,Belo2021,Belo2022}. The collected data is often collected in the laboratory environment (instead of the real one), which might not prepare the model for the real-life interaction~\cite{ClarkTurner2017,Turner2018,Romeo2018}. Additionally, the performance of the known solutions is not acceptable for the clinical intervention, due to the high possibility of making a mistake by the robot~\cite{ClarkTurner2017,Turner2018,Romeo2019,Hijaz2021}. This might be caused by the insufficient number of interactions with the user (not enough data) or the fact that the collected data is imbalanced (some actions are performed more often than others)~\cite{Hijaz2021}. Finally, many of the known solutions have a small action space which significantly limits the capabilities of the robot~\cite{Qureshi2016,Qureshi2017,Qureshi2018,ClarkTurner2017,Turner2018,Belo2021,Belo2022,Romeo2018,Romeo2019}.
 
-Deficits to be solved:
+In this project we plan to face the following challenges:
 \begin{itemize}
-	\item Social behaviour and game difficulty personalisation
-	\item Small action space 
-	\item Robot making mistakes (in case the model is not learned sufficiently) - solution - learning from guidance
+	\item enabling the robot to personalise the game difficulty and social behaviour, by feeding to the DL network not only sensory data but also an additional information with an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021})
+	\item maintenance of an adequately big action space for conducting a therapy intervention (similar to~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task})  
+	\item making the model less erroneous, by pretraining the model on the manually collected dataset and applying learning from guidance approach, similarly to~\cite{senft2017supervised}.
 \end{itemize}
 
-
 \subsection{Approach}
-What is your intended approach?
+ Our proposed approach is an adaptation of the SocialDQN~\cite{Belo2022}. However, instead of an extra input in the form of one-hot vector encoding for the social signals, we suggest an extra input that would encode the current game state, as depicted in Fig.~\ref{fig:proposed_architecture}. This solution would provide the network with a necessary information for giving an engaging feedback to the user (based on the image), as well as adapting the difficulty of the game (based on the game signals). The game signals vector would contain the information about the last chosen difficulty level and if the user succeeded solving the task. 
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/architecture/proposed_architecture.png}
+	\caption{Adapted architecture of SocialDQN~\cite{Belo2022}}
+	\label{fig:proposed_architecture}
+\end{figure}
+
+The action space will consist of 5 actions, similarly as in~\cite{tsiakas2018task,stolarz2022learningbased,stolarz2022personalisedrobot}, namely, setting one of the three difficulty levels and providing encouraging or challenging feedback. Regarding the reward for the model, we suggest the similar approach as in~\cite{senft2017supervised}, which is learning from guidance. We make an assumption that during the therapy for children with ASD, there is always a therapist that can accept or overwrite the actions of the robot (before being executed). We thus base the reward on the information from the therapist, who is a supervisor of the system in that case. The feedback from the therapist will not only influence the reward, but also the action executed in the end.
 
 \subsection{Evaluation}
-How will you compare you approach with existing approaches?
+We will evaluate the proposed approach on the manually collected data during the experiments conducted in the laboratory environment as in~\cite{stolarz2022learningbased}. In order to increase the amount of training data we will apply augmentation techniques (e.g. mirroring the image in the vertical axis as mentioned in~\cite{romeo2021human}).
 
 \section{Project Plan}
 
