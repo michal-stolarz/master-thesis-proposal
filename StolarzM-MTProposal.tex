@@ -7,14 +7,25 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{array}
+\usepackage{hyperref}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\widthsym}{1.6cm}
+\newcommand{\widthdesc}{7cm}
+\newcommand{\widthdel}{5cm}
+\newcommand{\widthdescdel}{12cm}
 
 \renewcommand{\arraystretch}{1.5}
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 
-\title{Deep-Learning-Based Personalisation of Robot Behaviour for Assistive Robotics}
+\title{Deep Learning-Based Personalisation of Robot Behaviour for Assistive Robotics}
 \author{Michał Stolarz}
-\supervisors{Prof. Dr. Paul G. Plöger\\M.Sc. Alex Mitrevski}
+\supervisors{Prof. Dr. Paul G. Plöger\\MSc. Alex Mitrevski}
 \date{January 2023}
 
 \thirdpartylogo{images/migrave.png}
@@ -42,8 +53,39 @@ The main problem during RAT for children with autism is that the therapists have
 
 Currently, in order to enable the robot to react appropriately in various social situation during an interaction with the user, many works make use of an engagement estimator. Engagement is the feature that is often used for the development of behaviour models~\cite{senft2015sparc,senft2015human,tsiakas2018task,del2022learning}. It can be measured with the use of EEG headset~\cite{tsiakas2018task}, but an external engagement observer might be more convenient for children with ASD, as they may be overwhelmed by the sensory stimuli if they need to wear an additional device during therapy~\cite{javed2019robotic}. In the literature, several types of algorithms that estimate engagement from features obtained using the OpenFace library~\cite{baltrusaitis2018openface, jain2020modeling, kaur2019domain, karimah2021implementation}, eye gaze~\cite{khorrami2014system},  body posture~\cite{ritschel2017adapting} or visual data~\cite{mane2018engagement, del2020you} can be found. Some of these are also able to capture and classify temporal data~\cite{del2020you, karimah2021implementation}.
 
-However, the model estimating an engagement used further for decision-making process is not perfect and might introduce an additional error to the behaviour model. This is a problem of a significant impact on the robot behaviour and was mentioned in our recent work~\cite{stolarz2022learningbased}. To alleviate the impact of false predictions on the feature level we suggest to turn towards data-driven methods that will be able to use a raw sensor data instead of high-level features (e.g. engagement level) that have to be estimated separately. However, the tabular approaches like Q-learning (used in our recent work~\cite{stolarz2022learningbased}), are unsuitable for big state spaces~\cite{akalin2021reinforcement}, like raw sensory data. That is why in this work, we are planning to use deep learning (DL) for that purpose. In the next section, we will introduce DL techniques used in the context of decision-making for social robotics.
+However, the model estimating an engagement used further for decision-making process is not perfect and might introduce an additional error to the behaviour model. This is a problem of a significant impact on the robot behaviour and was mentioned in our recent work~\cite{stolarz2022learningbased}. To alleviate the impact of false predictions on the feature level we suggest to turn towards data-driven methods that will be able to use a raw sensor data instead of high-level features (e.g. engagement level) that have to be estimated separately. However, the tabular approaches like Q-learning (used in our recent work~\cite{stolarz2022learningbased}), are unsuitable for big state spaces~\cite{akalin2021reinforcement}, like raw sensory data. That is why in this work, we are planning to use deep learning (DL) for creating a visuomotor behaviour model. In the next section, we will introduce DL techniques used in the context of decision-making for social robotics.
 
+\section{Problem Statement}
+The problem that is going to be approached during the project is to develop a personalised behaviour model for the social robot which will increase its autonomy during RAT for children with ASD. This should decrease the workload of the therapist that will not have to control the robot remotely. The model should be able to perform both social behaviour and game difficulty personalisation, as the children should increase their skills and stay engaged during the intervention.
+
+As we want to avoid an error provided by an additional model, such as engagement estimator (calculating high-level features for the behaviour model), we want to develop a decision-making algorithm that operates on the raw sensory data. As the conventional tabular approaches are unsuitable for that purpose~\cite{akalin2021reinforcement}, we will focus on the DL techniques.
+
+\subsection{Deficits to Be Solved}
+First of all, based on our literature search, in HRI there are no DL based solutions for both social behaviour and game difficulty personalisation. That means that existing approaches for social behaviour adaptation are not designed for conducting games with a user. Other deficits of the social behaviour personalisation are related to the used models. First of all, the DL neural networks require a big amount of data in order to converge, that is why a big number of interactions with the user is needed. Moreover, the training is computationally heavy, that is why it can not be performed continuously during a human-robot interaction~\cite{Qureshi2016,Qureshi2017,Qureshi2018,Romeo2019}. The developed models for social behaviour adaptation in many cases were trained and evaluated on the previously collected datasets~\cite{ClarkTurner2017,Romeo2018,Hijaz2021} or in the simulation~\cite{Turner2018,Belo2021,Belo2022}. Moreover, the data is often collected in the laboratory environment (instead of the real one), which might not prepare the model for the real-life interaction~\cite{ClarkTurner2017,Turner2018,Romeo2018}. Additionally, the performance of the known solutions is not acceptable for the clinical intervention, due to the high possibility of making a mistake by the robot~\cite{ClarkTurner2017,Turner2018,Romeo2019,Hijaz2021}. This might be caused by the insufficient number of interactions with the user (not enough data) or the fact that the collected data is imbalanced (some actions are performed more often than others)~\cite{Hijaz2021}. Finally, many of the known solutions have a small action space which significantly limits the capabilities of the robot~\cite{Qureshi2016,Qureshi2017,Qureshi2018,ClarkTurner2017,Turner2018,Belo2021,Belo2022,Romeo2018,Romeo2019}.
+
+Secondly, up to our knowledge, in HRI there are no DL based solutions for game difficulty personalisation. There are only works describing applications of DRL algorithms as virtual~\cite{mnih2015human,hausknecht2015deep,sorokin2015deep} or robotic~\cite{Cuayahuitl2017,Cuayahuitl2020} opponents for different kinds of games.
+
+In this project we plan to face the following challenges:
+\begin{itemize}
+	\item enabling the robot to personalise the game difficulty and social behaviour, by feeding to the DL network not only sensory data but also an additional information with an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021}) containing the game information,
+	\item maintenance of an adequately big action space for conducting a therapy intervention (similar to~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task}),
+	\item making the model less erroneous, by pretraining the model on the manually collected dataset and applying learning from guidance approach, similarly to~\cite{senft2017supervised}.
+\end{itemize}
+
+\subsection{Proposed Approach}
+Our proposed approach would be an adpatation of the CNN used in~\cite{Romeo2018,Romeo2019} or of SocialDQN~\cite{Belo2022}. In the second case, instead of an extra input (additional to the input with 8 grayscale images) in the form of one-hot vector encoding for the social signals, we suggest an extra input that would encode the current game state, as depicted in Fig.~\ref{fig:proposed_architecture}. This solution would provide the network with a necessary information for giving an engaging feedback to the user (based on the image), as well as adapting the difficulty of the game (based on the game signals). The game signals vector would contain the information about the last chosen difficulty level and if the user succeeded solving the task. 
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/architecture/proposed_architecture.png}
+	\caption{Adapted architecture of SocialDQN~\cite{Belo2022}}
+	\label{fig:proposed_architecture}
+\end{figure}
+
+The action space will consist of 5 actions, similarly as in~\cite{tsiakas2018task,stolarz2022learningbased,stolarz2022personalisedrobot}, namely, setting one of the three difficulty levels and providing encouraging or challenging feedback. Regarding the reward for the model, we suggest the similar approach as in~\cite{senft2017supervised}, which is learning from guidance. We make an assumption that during the therapy for children with ASD, there is always a therapist that can accept or overwrite the actions of the robot (before being executed). We thus base the reward on the information from the therapist, who is a supervisor of the system in that case. The feedback from the therapist will not only influence the reward, but also the action executed in the end. We believe, that similar changes (introducing an extra input vector with game signals, increasing the number of possible actions, retraining based on the feedback from the supervisor) can be done to the simpler model, which is a CNN presented in~\cite{Romeo2018,Romeo2019}.
+
+\subsection{Evaluation}
+We will evaluate the proposed approach on the manually collected data during the experiments conducted in the laboratory environment as in~\cite{stolarz2022learningbased}. In order to increase the amount of training data we will apply augmentation techniques (e.g. mirroring the image in the vertical axis as mentioned in~\cite{romeo2021human}).
 
 \section[Related Work]{Related Work\footnote{Parts of this chapter have been published in~\cite{stolarz2022personalized}}}
 
@@ -137,38 +179,134 @@ As mentioned before, the provided datasets are not suitable for training the mod
 
 First of all, the autism intervention scenarios can be simulated with the Simulator for Deep Reinforcement Learning and Social Robotics (SimDRLSR)~\cite{Belo2021}.\footnote{\url{https://github.com/JPedroRBelo/simDRLSR}} Here, the actions of the simulated humans are defined with scripts. Additionally, the robot's actions can be evaluated (whether they are socially acceptable) by human referees with a provided validation tool~\cite{Belo2022}\footnote{\url{https://github.com/JPedroRBelo/validation_tool_socialdqn}}. Although a simulation is a cheap and fast method for data collection for training a DL agent, the important features for action selection during an autism intervention are facial expressions, eye gaze and head orientation of the users~\cite{stolarz2022learningbased}, which might not be possible to reflect in the simulation.
 
-Another possibility is to collect the data manually. This requires a suitable software that would enable a researcher to control the robot, as well as appropriately organise and store the collected data. There are publicly available packages that can be used as a guideline for creating such a software~\cite{Turner2018,carpio2018learning,carpio2019learning}\footnote{\url{https://github.com/AssistiveRoboticsUNH/deep_reinforcement_abstract_lfd}}\footnote{\url{https://github.com/AssistiveRoboticsUNH/TR-LfD}}.
+Another possibility is to collect the data manually. This requires a suitable software that would enable a researcher to control the robot, as well as appropriately organise and store the collected data. There are publicly available packages that can be used as a guideline for creating such a software~\cite{Turner2018,carpio2018learning,carpio2019learning}.\footnote{\url{https://github.com/AssistiveRoboticsUNH/deep_reinforcement_abstract_lfd}}$^,$\footnote{\url{https://github.com/AssistiveRoboticsUNH/TR-LfD}}
 
-\section{Problem Statement}
-The problem that is going to be approached during the project is to develop a personalised behaviour model for the social robot which will increase its autonomy during RAT for children with ASD. This should decrease the workload of the therapist that will not have to control the robot remotely. The model should be able to perform both social behaviour and game difficulty personalisation, as the children should increase their skills and stay engaged during the intervention.
 
-As we want to avoid an error provided by an additional model, such as engagement estimator (calculating high-level features for the behaviour model), we want to develop a decision-making algorithm that operates on the raw sensory data. As the conventional tabular approaches are unsuitable for that purpose~\cite{akalin2021reinforcement}, we will focus on the DL techniques.
+\section{Project Plan}
 
-\subsection{Deficits to Be Solved}
-First of all, based on our literature search, in HRI there are no DL based solutions for both social behaviour and game difficulty personalisation. That means that existing approaches for social behaviour adaptation are not designed for conducting games with a user. Other deficits of the social behaviour personalisation are related to the used models. First of all, the DL neural networks require a big amount of data in order to converge, that is why a big number of interactions with the user is needed. Moreover, the training is computationally heavy, that is why it can not be performed continuously during a human-robot interaction~\cite{Qureshi2016,Qureshi2017,Qureshi2018,Romeo2019}. The developed models for social behaviour adaptation in many cases were trained and evaluated on the previously collected datasets~\cite{ClarkTurner2017,Romeo2018,Hijaz2021} or in the simulation~\cite{Turner2018,Belo2021,Belo2022}. The collected data is often collected in the laboratory environment (instead of the real one), which might not prepare the model for the real-life interaction~\cite{ClarkTurner2017,Turner2018,Romeo2018}. Additionally, the performance of the known solutions is not acceptable for the clinical intervention, due to the high possibility of making a mistake by the robot~\cite{ClarkTurner2017,Turner2018,Romeo2019,Hijaz2021}. This might be caused by the insufficient number of interactions with the user (not enough data) or the fact that the collected data is imbalanced (some actions are performed more often than others)~\cite{Hijaz2021}. Finally, many of the known solutions have a small action space which significantly limits the capabilities of the robot~\cite{Qureshi2016,Qureshi2017,Qureshi2018,ClarkTurner2017,Turner2018,Belo2021,Belo2022,Romeo2018,Romeo2019}.
+\subsection{Work Packages}
+During the R\&D project the following working packages will be delivered:
+\begin{enumerate}
+	\item[WP1] \textbf{Literature search on the Interactive Machine Learning using human guidance} \\ Objectives:
+	\begin{itemize}
+		\item Search the human guided Interactive Machine Learning concepts commonly used in the Human-Robot Interaction~\cite{martins2019user}~\cite{senft2015sparc}~\cite{senft2017supervised}~\cite{senft2019teaching}.
+		\item Search the human guided Interactive Machine Learning concepts used specifically in the autism Robot-Assisted Therapies~\cite{cao2017survey}~\cite{esteban2017build}~\cite{feng2018control}~\cite{senft2015human}.
+	\end{itemize}
+	\item[WP2] \textbf{Literature search on the Interactive Machine Learning using human feedback} \\
+	Objectives:
+	\begin{itemize}
+		\item Search the concepts of Interactive Machine Learning using human feedback commonly used in the Human-Robot Interaction~\cite{rossi2017user}~\cite{martins2019user}~\cite{tsiakas2018task}~\cite{gordon2016affective}~\cite{karami2016adaptive}~\cite{kubota2021methods}.
+		\item Search the concepts of Interactive Machine Learning using human feedback used specifically in the autism Robot-Assisted Therapies~\cite{cao2017survey}~\cite{scassellati2018improving}.
+	\end{itemize}
+	\item [WP3] \textbf{Design of the framework for  Interactive Machine Learning} \\
+	Objectives:
+	\begin{itemize}
+		\item Choose the most adequate framework for Interactive Machine Learning for autism therapy that is possible to be implemented on the QTrobot or NAO.
+		\item Consider combining learning from feedback and learning from guidance approaches~(\cite{tsiakas2016adaptive}~\cite{tsiakas2016intelligent}) in order to increase the effectiveness of the system.
+	\end{itemize}
+	\item [WP4] \textbf{Deployment of the learning framework with the simulated user model} \\
+	Objectives:
+	\begin{itemize}
+		\item Implement the learning framework.
+		\item Set up the simulated user model (e.g.:~\cite{senft2015human}~,~\cite{tsiakas2018task}).
+		\item Evaluate the learning framework with the simulated user model.
+	\end{itemize}
+	\item [WP5] \textbf{Deployment of the learning framework in the real-world environment} \\
+	Objectives:
+	\begin{itemize}
+		\item Integrate the framework for Interactive Machine Learning with the physical robot (QTrobot or NAO).
+		\item Evaluate the learning framework in the real-life scenario.
+	\end{itemize}
+	\item [WP6] \textbf{Project report} \\
+	Objectives:
+	\begin{itemize}
+		\item Merge the results from the previous work packages.
+		\item Write the final report.
+	\end{itemize}
+\end{enumerate}
 
-In this project we plan to face the following challenges:
-\begin{itemize}
-	\item enabling the robot to personalise the game difficulty and social behaviour, by feeding to the DL network not only sensory data but also an additional information with an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021})
-	\item maintenance of an adequately big action space for conducting a therapy intervention (similar to~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task})  
-	\item making the model less erroneous, by pretraining the model on the manually collected dataset and applying learning from guidance approach, similarly to~\cite{senft2017supervised}.
-\end{itemize}
+\subsection{Milestones}
+\begin{enumerate}
+	\item[M1] \textbf{Literature search} \\
+	At this milestone, the literature search in the field of Interactive Machine Learning using human guidance and feedback should be done and the respective results should be summarized in the form of reports.
+	\item[M2] \textbf{Experimental setup and analysis with a simulated user model} \\
+	At this milestone, the most adequate framework for Interactive Machine Learning should be chosen, implemented and evaluated with a simulated user model. The choice of the learning approach, as well as the evaluation results, shall be documented in the form of the report. If the milestone is not achieved (implementation of the user model is too time consuming), the learning framework will be evaluated directly during the interaction with the real user. 
+	\item[M3] \textbf{Experimental setup and analysis in the real environment} \\
+	At this milestone, the chosen framework for Interactive Machine Learning should be integrated into the physical robot and evaluated with the humans. The evaluation results shall be documented in the form of the report.
+	\item[M4] \textbf{Report submission} \\
+	At this milestone, the final R\&D report should be submitted.
+\end{enumerate}
 
-\subsection{Approach}
- Our proposed approach is an adaptation of the SocialDQN~\cite{Belo2022}. However, instead of an extra input in the form of one-hot vector encoding for the social signals, we suggest an extra input that would encode the current game state, as depicted in Fig.~\ref{fig:proposed_architecture}. This solution would provide the network with a necessary information for giving an engaging feedback to the user (based on the image), as well as adapting the difficulty of the game (based on the game signals). The game signals vector would contain the information about the last chosen difficulty level and if the user succeeded solving the task. 
+\subsection{Tasks and Deliverables}
+Tasks belonging to each working package as well as related deliverables are presented in the \autoref{tab:tasks_deliverables}.
+%\begin{table}[h]
+{
+	\footnotesize
+	\begin{longtable}{ |p{\widthsym}||p{\widthdesc}|p{\widthdel}|  }
+		\hline
+		Working Package~/ Task&Description&Deliverable\\
+		\hline
+		\textbf{WP1} & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Literature search on the Interactive Machine Learning using human guidance}} \\
+		\hline
+		T1.1 & Research on Interactive Machine Learning using human guidance in the Human-Robot Interaction & D1.1: Report with the overview of the commonly used methods\\
+		\hline
+		T1.2 & Research on the Interactive Machine Learning using human guidance in the autism Robot-Assisted Therapies & D1.2: Report with deficits and contibutions of the found approaches\\
+		\hline
+		\textbf{WP2}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Literature search on the Interactive Machine Learning using human feedback}} \\
+		\hline 
+		T2.1 & Research on Interactive Machine Learning using human feedback in the Human-Robot Interaction & D2.1: Report with the overview of the commonly used methods\\
+		\hline
+		T2.2 & Research on the Interactive Machine Learning using human feedback in the autism Robot-Assisted Therapies & D2.2: Report with deficits and contributions of the found approaches\\
+		\hline
+		\textbf{WP3}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Design of the framework for Interactive Machine Learning}} \\
+		\hline
+		T3.1 & Selection of the feasible framework for Interactive Machine Learning that is adequate for autism therapy & \multirow{2}{\linewidth}{D3.1: Report with the description of the chosen design and choice justification}\\
+		\cline{1-2}
+		T3.2 & Selection of the second, rather simpler framework for Interactive Machine Learning as backup &
+		\\
+		\hline
+		\textbf{WP4}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Deployment of the learning framework with the simulated user model}} \\
+		\hline
+		T4.1 & Setup of the virtual test environment & \multirow{3}{\linewidth}{D4.1: Implemented software}\\
+		\cline{1-2}
+		T4.2 & Implementation of the framework for Interactive Machine Learning & \\
+		\cline{1-2}
+		T4.3 & Implementation of the user model & \\
+		\cline{1-3}
+		T4.4 & Evaluation of the framework for Interactive Machine Learning with a simulated user model & D4.2: Evaluation report\\
+		\hline
+		\textbf{WP5}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Deployment of the learning framework in the real-world environment}} \\
+		\hline
+		T5.1 & Integration of the framework for Interactive Machine Learning with the QTrobot/Nao & D5.1: Implemented software\\
+		\cline{1-3}
+		T5.2 & Evaluation of the framework for Interactive Machine Learning in the real-world environment & D5.2: Evaluation report\\
+		\hline
+		\textbf{WP6}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Project report}} \\
+		\hline
+		T6.1 & Extraction of the most relevant information regarding the state-of-the-art & \multirow{3}{\linewidth}{D6.1: Draft of the merged reports from the previous deliverables}\\
+		\cline{1-2}
+		T6.2 & Describtion of the simulation and real-world experimentation setups & \\
+		\cline{1-2}
+		T6.3 & Creation of the proper visualisations of the evaluation data & \\
+		\cline{1-3}
+		T6.4 & Iterative corrections with the supervisors & D6.2: Final R\&D project report\\
+		\hline
+		\caption{\centering Tasks and deliverables (WP stands for working package, T for task, D for deliverable)}
+		\label{tab:tasks_deliverables}
+	\end{longtable}
+}
+%\end{table}
 
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width=0.9\textwidth]{images/architecture/proposed_architecture.png}
-	\caption{Adapted architecture of SocialDQN~\cite{Belo2022}}
-	\label{fig:proposed_architecture}
+\subsection{Project Schedule}
+The project schedule is illustrated as a Gantt chart (\autoref{fig:gantt}). It includes the tasks as well as the milestones mentioned in the previous subsections.
+
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{images/plan/plan.png}
+	\caption{Project schedule}
+	\label{fig:gantt}
 \end{figure}
 
-The action space will consist of 5 actions, similarly as in~\cite{tsiakas2018task,stolarz2022learningbased,stolarz2022personalisedrobot}, namely, setting one of the three difficulty levels and providing encouraging or challenging feedback. Regarding the reward for the model, we suggest the similar approach as in~\cite{senft2017supervised}, which is learning from guidance. We make an assumption that during the therapy for children with ASD, there is always a therapist that can accept or overwrite the actions of the robot (before being executed). We thus base the reward on the information from the therapist, who is a supervisor of the system in that case. The feedback from the therapist will not only influence the reward, but also the action executed in the end.
-
-\subsection{Evaluation}
-We will evaluate the proposed approach on the manually collected data during the experiments conducted in the laboratory environment as in~\cite{stolarz2022learningbased}. In order to increase the amount of training data we will apply augmentation techniques (e.g. mirroring the image in the vertical axis as mentioned in~\cite{romeo2021human}).
-
+%Template
 \section{Project Plan}
 
 \subsection{Work Packages}
