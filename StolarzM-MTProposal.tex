@@ -56,6 +56,8 @@ Currently, in order to enable the robot to react appropriately in various social
 However, the model estimating an engagement used further for decision-making process is not perfect and might introduce an additional error to the behaviour model. This is a problem of a significant impact on the robot behaviour and was mentioned in our recent work~\cite{stolarz2022learningbased}. To alleviate the impact of false predictions on the feature level we suggest to turn towards data-driven methods that will be able to use a raw sensor data instead of high-level features (e.g. engagement level) that have to be estimated separately. However, the tabular approaches like Q-learning (used in our recent work~\cite{stolarz2022learningbased}), are unsuitable for big state spaces~\cite{akalin2021reinforcement}, like raw sensory data. That is why in this work, we are planning to use deep learning (DL) for creating a visuomotor behaviour model. In the next section, we will introduce DL techniques used in the context of decision-making for social robotics.
 
 \section{Problem Statement}
+\label{sec:problem_statement}
+
 The problem that is going to be approached during the project is to develop a personalised behaviour model for the social robot which will increase its autonomy during RAT for children with ASD. This should decrease the workload of the therapist that will not have to control the robot remotely. The model should be able to perform both social behaviour and game difficulty personalisation, as the children should increase their skills and stay engaged during the intervention.
 
 As we want to avoid an error provided by an additional model, such as engagement estimator (calculating high-level features for the behaviour model), we want to develop a decision-making algorithm that operates on the raw sensory data. As the conventional tabular approaches are unsuitable for that purpose~\cite{akalin2021reinforcement}, we will focus on the DL techniques.
@@ -73,6 +75,8 @@ In this project we plan to face the following challenges:
 \end{itemize}
 
 \subsection{Proposed Approach}
+\label{subsec:proposed_approach}
+
 Our proposed approach would be an adpatation of the CNN used in~\cite{Romeo2018,Romeo2019} or of SocialDQN~\cite{Belo2022}. In the second case, instead of an extra input (additional to the input with 8 grayscale images) in the form of one-hot vector encoding for the social signals, we suggest an extra input that would encode the current game state, as depicted in Fig.~\ref{fig:proposed_architecture}. This solution would provide the network with a necessary information for giving an engaging feedback to the user (based on the image), as well as adapting the difficulty of the game (based on the game signals). The game signals vector would contain the information about the last chosen difficulty level and if the user succeeded solving the task. 
 
 \begin{figure}[htb!]
@@ -185,39 +189,33 @@ Another possibility is to collect the data manually. This requires a suitable so
 \section{Project Plan}
 
 \subsection{Work Packages}
-During the R\&D project the following working packages will be delivered:
+During the master thesis the following working packages will be delivered:
 \begin{enumerate}
-	\item[WP1] \textbf{Literature search on the Interactive Machine Learning using human guidance} \\ Objectives:
+	\item[WP1] \textbf{Literature search on the DL adaptation techniques used in HRI} \\ Objectives:
 	\begin{itemize}
-		\item Search the human guided Interactive Machine Learning concepts commonly used in the Human-Robot Interaction~\cite{martins2019user}~\cite{senft2015sparc}~\cite{senft2017supervised}~\cite{senft2019teaching}.
-		\item Search the human guided Interactive Machine Learning concepts used specifically in the autism Robot-Assisted Therapies~\cite{cao2017survey}~\cite{esteban2017build}~\cite{feng2018control}~\cite{senft2015human}.
+		\item Search the DL based social behaviour learning approaches commonly used in HRI.
+		\item Search the DL based game difficulty adaptation techniques commonly used in HRI. 
 	\end{itemize}
-	\item[WP2] \textbf{Literature search on the Interactive Machine Learning using human feedback} \\
+	\item [WP2] \textbf{Selection of the best performing DL architecture for a social behaviour learning} \\
 	Objectives:
 	\begin{itemize}
-		\item Search the concepts of Interactive Machine Learning using human feedback commonly used in the Human-Robot Interaction~\cite{rossi2017user}~\cite{martins2019user}~\cite{tsiakas2018task}~\cite{gordon2016affective}~\cite{karami2016adaptive}~\cite{kubota2021methods}.
-		\item Search the concepts of Interactive Machine Learning using human feedback used specifically in the autism Robot-Assisted Therapies~\cite{cao2017survey}~\cite{scassellati2018improving}.
+		\item Select available DL based social behaviour learning architectures~\cite{Romeo2018,Romeo2019,Qureshi2016,Qureshi2017,Belo2022}.
+		\item Select suitable datasets~\cite{Ko2021,Shahroudy_2016_CVPR,Liu2020,patrona2021overview}.
+		\item Compare the previously selected DL architectures based on one of the previously selected datasets and choose the best performing model.
 	\end{itemize}
-	\item [WP3] \textbf{Design of the framework for  Interactive Machine Learning} \\
+	\item [WP3] \textbf{Adaptation of the social behaviour DL model for the sequence-learning game use case} \\
 	Objectives:
 	\begin{itemize}
-		\item Choose the most adequate framework for Interactive Machine Learning for autism therapy that is possible to be implemented on the QTrobot or NAO.
-		\item Consider combining learning from feedback and learning from guidance approaches~(\cite{tsiakas2016adaptive}~\cite{tsiakas2016intelligent}) in order to increase the effectiveness of the system.
+		\item Adaptat the chosen DL architecture, such that it can be used for both social behaviour learning and game difficulty adaptation (the proposed approach is described in subsection~\ref{subsec:proposed_approach}).
+		\item Perform initial training and evaluation of the adapted architecture on the dataset collected for our previous works~\cite{stolarz2022personalisedrobot,stolarz2022learningbased}.
 	\end{itemize}
-	\item [WP4] \textbf{Deployment of the learning framework with the simulated user model} \\
+	\item [WP4] \textbf{Evaluation of the learning framework in the real-world environment} \\
 	Objectives:
 	\begin{itemize}
-		\item Implement the learning framework.
-		\item Set up the simulated user model (e.g.:~\cite{senft2015human}~,~\cite{tsiakas2018task}).
-		\item Evaluate the learning framework with the simulated user model.
+		\item Prepare the experimentation setup and gather volunteers for the experiments. 
+		\item Conduct an evaluation with the proposed DL model (deployed on the QTrobot or NAO) similarly to~\cite{Qureshi2016,romeo2021human}.
 	\end{itemize}
-	\item [WP5] \textbf{Deployment of the learning framework in the real-world environment} \\
-	Objectives:
-	\begin{itemize}
-		\item Integrate the framework for Interactive Machine Learning with the physical robot (QTrobot or NAO).
-		\item Evaluate the learning framework in the real-life scenario.
-	\end{itemize}
-	\item [WP6] \textbf{Project report} \\
+	\item [WP5] \textbf{Project report} \\
 	Objectives:
 	\begin{itemize}
 		\item Merge the results from the previous work packages.
@@ -227,14 +225,12 @@ During the R\&D project the following working packages will be delivered:
 
 \subsection{Milestones}
 \begin{enumerate}
-	\item[M1] \textbf{Literature search} \\
-	At this milestone, the literature search in the field of Interactive Machine Learning using human guidance and feedback should be done and the respective results should be summarized in the form of reports.
-	\item[M2] \textbf{Experimental setup and analysis with a simulated user model} \\
-	At this milestone, the most adequate framework for Interactive Machine Learning should be chosen, implemented and evaluated with a simulated user model. The choice of the learning approach, as well as the evaluation results, shall be documented in the form of the report. If the milestone is not achieved (implementation of the user model is too time consuming), the learning framework will be evaluated directly during the interaction with the real user. 
-	\item[M3] \textbf{Experimental setup and analysis in the real environment} \\
-	At this milestone, the chosen framework for Interactive Machine Learning should be integrated into the physical robot and evaluated with the humans. The evaluation results shall be documented in the form of the report.
-	\item[M4] \textbf{Report submission} \\
-	At this milestone, the final R\&D report should be submitted.
+	\item[M1] \textbf{DL behaviour model selection} \\
+	At this milestone, the literature search in the field of DL in social behaviour learning and game difficulty adaptation should be done. Based on the evaluation of the selected social behaviour models the best performing one should be found. The respective results of literature search and models' evaluation should be summarized in the form of reports.
+	\item[M2] \textbf{DL behaviour model adaptation and experimental setup} \\
+	At this milestone, the most adequate social behaviour model should be adapted to the sequence-learning game and initially evaluated with a dataset collected for our previous works. If the aforementioned dataset will not be sufficient (e.g. too small amount of samples) the model will be trained and evaluated only during the real-life evaluation, for which the experimentation setup should be prepared. At this milestone, the implementation of the required DL algorithm as well as learning/evaluation pipeline should be ready. Additionally, the software for real-life evaluation should be prepared adequately.
+	\item[M3] \textbf{Real-life evaluation and report submission} \\
+	At this milestone, the results of the real-life evaluation of the DL behaviour model should have been obtained. The final master thesis report, containing all the results from the previous milestones should be submitted.
 \end{enumerate}
 
 \subsection{Tasks and Deliverables}
@@ -246,52 +242,44 @@ Tasks belonging to each working package as well as related deliverables are pres
 		\hline
 		Working Package~/ Task&Description&Deliverable\\
 		\hline
-		\textbf{WP1} & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Literature search on the Interactive Machine Learning using human guidance}} \\
+		\textbf{WP1} & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Literature search on the DL adaptation techniques used in HRI}} \\
 		\hline
-		T1.1 & Research on Interactive Machine Learning using human guidance in the Human-Robot Interaction & D1.1: Report with the overview of the commonly used methods\\
+		T1.1 & Research on DL based social behaviour learning concepts used in HRI & D1.1: Report with the overview of the commonly used methods\\
 		\hline
-		T1.2 & Research on the Interactive Machine Learning using human guidance in the autism Robot-Assisted Therapies & D1.2: Report with deficits and contibutions of the found approaches\\
+		T1.2 & Research on DL based game difficulty adaptation concepts commonly used in HRI & D1.2: Report with the overview of the commonly used methods\\
 		\hline
-		\textbf{WP2}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Literature search on the Interactive Machine Learning using human feedback}} \\
-		\hline 
-		T2.1 & Research on Interactive Machine Learning using human feedback in the Human-Robot Interaction & D2.1: Report with the overview of the commonly used methods\\
+		\textbf{WP2}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Selection of the best performing DL architecture for a social behaviour learning}} \\
 		\hline
-		T2.2 & Research on the Interactive Machine Learning using human feedback in the autism Robot-Assisted Therapies & D2.2: Report with deficits and contributions of the found approaches\\
-		\hline
-		\textbf{WP3}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Design of the framework for Interactive Machine Learning}} \\
-		\hline
-		T3.1 & Selection of the feasible framework for Interactive Machine Learning that is adequate for autism therapy & \multirow{2}{\linewidth}{D3.1: Report with the description of the chosen design and choice justification}\\
+		T2.1 & Selection of the available DL based social behaviour personalisation architectures & \multirow{2}{\linewidth}{D2.1: Report with the description of the selected architectures and dataset}\\
 		\cline{1-2}
-		T3.2 & Selection of the second, rather simpler framework for Interactive Machine Learning as backup &
+		T2.2 & Selection of the suitable datasets &
 		\\
 		\hline
-		\textbf{WP4}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Deployment of the learning framework with the simulated user model}} \\
+		T2.3 & Comparative evaluation of the previously selected DL architectures based on one of the previously selected datasets and choice of the best performing model & D2.2: Implementation of the models and report with the evaluation results\\
 		\hline
-		T4.1 & Setup of the virtual test environment & \multirow{3}{\linewidth}{D4.1: Implemented software}\\
+		\textbf{WP3}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Adaptation of the social behaviour DL model for the sequence-learning game}} \\
+		\hline
+		T3.1 & Adaptation of the chosen DL architecture, such that it can be used for both social behaviour learning and game difficulty adaptation & D3.1: Implemented software \\
+		\hline
+		T3.2 & Initial training and evaluation of the adapted architecture on the dataset collected for our previous works & D3.1: Report with the evaluation results \\
+		\hline
+		\textbf{WP4} & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Evaluation of the learning framework in the real-world environment}} \\
+		\hline
+		T4.1 & Preparation of the experimentation setup & D4.1: Implemented software \\
+		\hline
+		T4.2 & Evaluation with the proposed DL model (deployed on the QTrobot or NAO) & D4.2: Evaluation report\\
+		\hline
+		\textbf{WP5}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Project report}} \\
+		\hline
+		T5.1 & Merge of the reports from the previous deliverables & \multirow{3}{\linewidth}{D5.1: Draft of the master thesis report}\\
 		\cline{1-2}
-		T4.2 & Implementation of the framework for Interactive Machine Learning & \\
+		T5.2 & Detailed description of the real-world experimentation & \\
 		\cline{1-2}
-		T4.3 & Implementation of the user model & \\
+		T5.3 & Creation of the proper visualisations of the evaluation data & \\
 		\cline{1-3}
-		T4.4 & Evaluation of the framework for Interactive Machine Learning with a simulated user model & D4.2: Evaluation report\\
+		T5.4 & Iterative corrections with the supervisors & D5.2: Final master thesis report\\
 		\hline
-		\textbf{WP5}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Deployment of the learning framework in the real-world environment}} \\
-		\hline
-		T5.1 & Integration of the framework for Interactive Machine Learning with the QTrobot/Nao & D5.1: Implemented software\\
-		\cline{1-3}
-		T5.2 & Evaluation of the framework for Interactive Machine Learning in the real-world environment & D5.2: Evaluation report\\
-		\hline
-		\textbf{WP6}  & \multicolumn{2}{C{\widthdescdel}|}{\textbf{Project report}} \\
-		\hline
-		T6.1 & Extraction of the most relevant information regarding the state-of-the-art & \multirow{3}{\linewidth}{D6.1: Draft of the merged reports from the previous deliverables}\\
-		\cline{1-2}
-		T6.2 & Describtion of the simulation and real-world experimentation setups & \\
-		\cline{1-2}
-		T6.3 & Creation of the proper visualisations of the evaluation data & \\
-		\cline{1-3}
-		T6.4 & Iterative corrections with the supervisors & D6.2: Final R\&D project report\\
-		\hline
-		\caption{\centering Tasks and deliverables (WP stands for working package, T for task, D for deliverable)}
+		\caption{Tasks and deliverables (WP stands for working package, T for task, D for deliverable)}
 		\label{tab:tasks_deliverables}
 	\end{longtable}
 }
@@ -305,62 +293,6 @@ The project schedule is illustrated as a Gantt chart (\autoref{fig:gantt}). It i
 	\caption{Project schedule}
 	\label{fig:gantt}
 \end{figure}
-
-%Template
-\section{Project Plan}
-
-\subsection{Work Packages}
-\emph{Planning is the replacement of randomness by error.} (Einstein). Very much like you would never start a longer journey without a detailed travel plan, you should not start a project without a carefully though out work plan. A work package is a logical decomposition of a larger piece of work into smaller parts following a ``divide and conquer" strategy. It is very specific to the problem that you are going to address. Refrain from a rather generic decomposition. If your work plan looks similar to those of your school mates, which may address completely different problems then you have not thought carefully enough about how you approach the problem. It is ok to have two generic work packages \emph{Literature Study} and \emph{Project Report}. Discuss your work packages in the ASW seminar.
-
-The bare minimum will include the following packages:
-\begin{enumerate}
-    \item[WP1] Literature Study
-    \item[WP2] ...
-    \item[WP3] ...
-    \item  ...
-    \item[WPy] Evaluation of approach and comparison with similar approaches
-    \item[WPz] Project Report
-\end{enumerate}
-
-\subsection{Milestones}
-Milestones mark the completion of a certain activity or at least a major achievement in an activity. Milestones are also decision points, where you reflect on what you have achieved and what options you have for continuing your work in case you have not achieved what was planned. Above all, milestones have to be measurable. As above, if your milestones are the same as those of your school mates, then you may not have thought carefully enough about how your project shall progress.
-\begin{enumerate}
-    \item[M1] Literature review completed and best practice identified
-    \item[M2] ...
-    \item[M3] ...
-    \item[M4] Report submission
-\end{enumerate}
-
-\subsection{Project Schedule}
-Include a Gantt chart here. It doesn't have to be detailed, but it should include the milestones you mentioned above.
-Make sure to include the writing of your report throughout the whole project, not just at the end.
-
-\begin{figure}[h!]
-    \includegraphics[width=\textwidth]{images/rnd_deliverable_timeline}
-    \caption{My figure caption}
-    \label{fig:myfigure}
-\end{figure}
-
-\subsection{Deliverables}
-
-\subsubsection*{Minimum Viable}
-\begin{itemize}
-    \item Project results required to get a satisfying or sufficient grade.
-\end{itemize}
-
-\subsubsection*{Expected}
-\begin{itemize}
-    \item Project results required to get a good grade.
-\end{itemize}
-
-\subsubsection*{Desired}
-\begin{itemize}
-    \item Project results required to get an excellent grade.
-\end{itemize}
-
-Please note that the final grade will not only depend on the results obtained in your work, but also on how you present the results.
-
-\nocite{*}
 
 \bibliographystyle{plainnat} % Use the plainnat bibliography style
 \bibliography{bibliography.bib} % Use the bibliography.bib file as the source of references
