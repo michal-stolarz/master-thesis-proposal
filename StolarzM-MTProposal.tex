@@ -23,7 +23,7 @@
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 
-\title{Deep Learning-Based Adaptation of Robot Behaviour for Assistive Robotics}
+\title{Multimodal Deep Learning-Based Adaptation of Robot Behaviour for Assistive Robotics}
 \author{Michał Stolarz}
 \supervisors{Prof. Dr. Paul G. Plöger\\Dr. Alex Mitrevski}
 \date{February 2023}
@@ -78,17 +78,17 @@ Based on our literature search, in HRI there are no DL-based solutions for both 
 
 {
 	\footnotesize
-	\begin{longtable}{|p{6cm}||p{6cm}|}
+	\begin{longtable}{|p{0.47\linewidth}||p{0.47\linewidth}|}
 		\hline
 		\textbf{Deficit}&\textbf{Proposed Solution}\\
 		\hline
-		\multirow{3}{\linewidth}{Enabling the robot to adapt the activity difficulty and social behaviour} & Providing the DL network with the visual data and an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021}) containing the learning activity information \\
+		\multirow{3}{\linewidth}{Enabling the robot to adapt the activity difficulty and social behaviour} & Using multimodal input to the personalisation network. Concretely, we intend to examine a combination of visual data and an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021}) containing the learning activity information \\
 		\cline{2-2}
-		& Maintenance of an adequate action space~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task} enabling the robot to give a feedback to the user and change an activity difficulty\\
+		& Maintenance of an adequate action space~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task} enabling the robot to give feedback to the user and change an activity difficulty\\
 		\hline
-		\multirow{3}{\linewidth}{Preventing the robot from making socially unacceptable decisions} & Pretraining on the manually collected dataset~\cite{stolarz2022learningbased,stolarz2022personalisedrobot} \\
+		\multirow{3}{\linewidth}{Preventing the robot from making socially unacceptable decisions} & Pretraining on a manually collected dataset~\cite{stolarz2022learningbased,stolarz2022personalisedrobot} \\
 		\cline{2-2}
-		& Applying learning from guidance approach (similarly to~\cite{senft2017supervised}) where the robot's actions can be corrected by the supervisor before being executed
+		& Applying the learning from guidance approach (similarly to~\cite{senft2017supervised}) where the robot's actions can be corrected by the supervisor before being executed
 		\\
 		\hline
 		Evaluation during a real-life interaction & Performing a real-life evaluation as in~\cite{stolarz2022learningbased} \\
@@ -236,7 +236,7 @@ During the master's thesis, the following working packages will be delivered:
 	\item [WP4] \textbf{Evaluation of the learning framework during the real-life interaction} \\
 	Objectives:
 	\begin{itemize}
-		\item Prepare the experimentation setup and gather volunteers for the experiments. 
+		\item Prepare the experimentation setup and recruit volunteers for the experiments. 
 		\item Conduct an evaluation with the proposed DL model (deployed on the QTrobot or NAO) similar to~\cite{Qureshi2016,romeo2021human}.
 	\end{itemize}
 	\item [WP5] \textbf{Project report} \\
@@ -252,9 +252,9 @@ During the master's thesis, the following working packages will be delivered:
 	\item[M1] \textbf{DL behaviour model selection} \\
 	At this milestone, the literature search in the field of DL in social behaviour learning and game difficulty adaptation should be done. Based on the evaluation of the selected social behaviour models the best-performing one should be found. The respective results of the literature search and models' evaluation should be summarized in the form of reports.
 	\item[M2] \textbf{DL behaviour model adaptation and experimental setup} \\
-	At this milestone, the most adequate social behaviour model should be adapted to the sequence-learning game and initially evaluated with a dataset collected for our previous works. If possible (enough amount of the data) not only model's ability for adaptation but also for personalisation should be evaluated. If the aforementioned dataset will not be sufficient (e.g. too small amount of samples) the model will be trained and evaluated only during the real-life evaluation, for which the experimentation setup should be prepared. At this milestone, the implementation of the required DL algorithm as well as the learning/evaluation pipeline should be ready. Additionally, the software for real-life evaluation should be prepared adequately.
+	At this milestone, the most adequate social behaviour model should be adapted to the sequence-learning game and initially evaluated with a dataset collected for our previous works. If possible (enough amount of the data) not only model's ability for adaptation to the user groups but also for personalisation to the individual user should be evaluated. If the aforementioned dataset will not be sufficient (e.g. too small amount of samples) the model will be trained and evaluated only during the real-life evaluation, for which the experimentation setup should be prepared. At this milestone, the implementation of the required DL algorithm as well as the learning/evaluation pipeline should be ready. Additionally, the software for real-life evaluation should be prepared adequately.
 	\item[M3] \textbf{Real-life evaluation and report submission} \\
-	At this milestone, the results of the real-life evaluation of the DL behaviour model should have been obtained. If possible (enough amount of data) not only results showing the model's ability for adaptation but also for personalisation should be presented. The final master's thesis report, containing results from this and all the previous milestones, should be submitted.
+	At this milestone, the results of the real-life evaluation of the DL behaviour model should have been obtained. If possible (enough amount of data) not only results showing the model's ability for adaptation to the user groups but also for personalisation to the individual user should be presented. The final master's thesis report, containing results from this and all the previous milestones, should be submitted.
 \end{enumerate}
 
 \subsection{Tasks and Deliverables}
@@ -308,8 +308,10 @@ Tasks belonging to each working package as well as related deliverables are pres
 	\end{longtable}
 }
 %Notes:
-% discuss ALL the deficits in the related work section
 % say that we try personalisation but the first shot is adaptation
+% summarise datasets in the table
+% change the gantt chart start - 1.03.2023
+% send the proposal to Prof.Ploeger, if he has comments, tell about alex, ask if its ok to ask Marta
 
 \subsection{Project Schedule}
 The project schedule is illustrated as a Gantt chart (\autoref{fig:gantt}). It includes the tasks as well as the milestones mentioned in the previous subsections.
