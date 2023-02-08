@@ -18,6 +18,8 @@
 \newcommand{\widthdesc}{7cm}
 \newcommand{\widthdel}{5cm}
 \newcommand{\widthdescdel}{12cm}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 
 \renewcommand{\arraystretch}{1.5}
 \newcommand{\cmark}{\ding{51}}%
@@ -82,7 +84,7 @@ Based on our literature search, in HRI there are no DL-based solutions for both 
 		\hline
 		\textbf{Deficit}&\textbf{Proposed Solution}\\
 		\hline
-		\multirow{3}{\linewidth}{Enabling the robot to adapt the activity difficulty and social behaviour} & Using multimodal input to the personalisation network. Concretely, we intend to examine a combination of visual data and an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021}) containing the learning activity information \\
+		\multirow{3}{\linewidth}{Enabling the robot to adapt the activity difficulty and social behaviour} & Using multimodal input to the personalisation network. Concretely, we intend to examine a combination of visual data and an extra input vector (similarly to~\cite{Qureshi2018,Belo2022,Hijaz2021}) containing the learning activity information. \\
 		\cline{2-2}
 		& Maintenance of an adequate action space~\cite{stolarz2022learningbased,stolarz2022personalisedrobot,tsiakas2018task} enabling the robot to give feedback to the user and change an activity difficulty\\
 		\hline
@@ -158,14 +160,29 @@ The deficit of~\cite{Cuayahuitl2017} was faced in~\cite{Cuayahuitl2020} where th
 However, all of the aforementioned works describe a DRL agent as an opponent playing a game against a human user. No solutions for DRL just choosing the game difficulty for the user were found. Akalin et al.~\cite{Akalin2018} proposed an initial idea for a DRL for adjusting the difficulty level of the game during a social human-robot interaction with elderly people. According to the authors, the input would consist of three variables, namely, the user's valence and engagement, as well as the state of the game (the last difficulty level and information if the game is stopped or paused). The action space would consist of five actions: increasing, decreasing, not changing a difficulty level or pausing or stopping the game. The reward would be calculated based on the valence and engagement of the user. Unfortunately,~\cite{Akalin2018} is just a proposal of the solution without any implementation details or evaluation results. Additionally, the input and reward for the algorithm consist of high-level features, estimation of which (as explained in Section~\ref{subsec:project_goal}) might introduce additional error to the behaviour model.
 
 \subsection{Available Datasets}
- For training DL agents a huge amount of data is required, which explains the necessity for a dataset. We looked for publicly available datasets that can be used for training DL decision-making agents. Unfortunately, all of them can only be applied for testing the feasibility of social behaviour learning models. Because the datasets contain visual data we categorised them into two groups, depending on the perspective of the camera from which the video/pictures were recorded. The following datasets contain data recorded from the first-person perspective (the human partner/s is/are directly interacting with the robot):
-\begin{itemize}
-	\item AIR-Act2Act~\cite{Ko2021}: 100 subjects, 10 actions, 5000 samples, 3 modalities (depth, skeleton, RGB)
-	\item NTU RGB+D~\cite{Shahroudy_2016_CVPR,Liu2020}: 106 subjects, 26 actions, 8276 samples, 3 modalities (depth, skeleton, RGB).
-	\item \cite{ryoo2013firstperson}: 8 subjects, 7 actions, 684 samples, 1 modality (RGB) 
-	\item \cite{ryoo2015robot}: 8 subjects, 9 actions, 180 samples, 2 modalities (RGB, depth)
-	\item AUTH UAV Gesture~\cite{patrona2021overview} (contains parts of datasets presented in \cite{Shahroudy_2016_CVPR,Perera_2018_ECCV_Workshops}): 8 subjects (newly captured), 6 actions, 4930 samples, 1 modality (RGB) 
-\end{itemize}
+ For training DL agents a huge amount of data is required, which explains the necessity for a dataset. We looked for publicly available datasets that can be used for training DL decision-making agents. Unfortunately, all of them can only be applied for testing the feasibility of social behaviour learning models. Because the datasets contain visual data we categorised them into two groups, depending on the perspective of the camera from which the video/pictures were recorded. The datasets presented in the Table~\ref{tab:datasets} contain data recorded from the first-person perspective (the human partner/s is/are directly interacting with the robot).
+ 
+ {
+ 	\footnotesize
+ 	\centering
+ 	\begin{longtable}{|M{0.26\linewidth}|M{0.12\linewidth}|M{0.11\linewidth}|M{0.11\linewidth}|M{0.25\linewidth}|}
+ 		\hline
+ 		\textbf{Dataset}&\textbf{\#Subjects}&\textbf{\#Actions}&\textbf{\#Samples}&\textbf{Modalities}\\
+ 		\hline
+ 		AIR-Act2Act~\cite{Ko2021} & 100 & 10 & 5000 & Depth, Skeleton, RGB \\
+ 		\hline
+ 		NTU RGB+D~\cite{Shahroudy_2016_CVPR,Liu2020} & 106 & 26 & 8276 & Depth, Skeleton, RGB \\
+ 		\hline
+ 		\cite{ryoo2013firstperson} & 8 & 7 & 684 & RGB \\
+ 		\hline
+ 		\cite{ryoo2015robot} & 8 & 9 & 180 & Depth, RGB \\
+ 		\hline
+ 		AUTH UAV Gesture~\cite{patrona2021overview}\footnote{AUTH UAV Gesture dataset contains parts of the datasets presented in \cite{Shahroudy_2016_CVPR,Perera_2018_ECCV_Workshops}} & 8\footnote{Number of newly captured subjects that were not present in~\cite{Shahroudy_2016_CVPR,Perera_2018_ECCV_Workshops}} & 6 & 4930 & RGB \\
+ 		\hline
+ 		\caption{Datasets with the first-person perspective recordings}
+ 		\label{tab:datasets}
+ 	\end{longtable}
+ }
 
 Most of the aforementioned datasets are designed for activity recognition~\cite{Shahroudy_2016_CVPR,Liu2020,ryoo2013firstperson}, activity prediction~\cite{ryoo2015robot} and gesture recognition~\cite{patrona2021overview}. Only the AIR-Act2Act~\cite{Ko2021} dataset was designed with the purpose of teaching the robot social skills, namely, the scenario, where the study participant is performing an action, is labelled with the reaction type that the robot should undertake (Fig.~\ref{fig:act2act_sample}). Additionally, this dataset contains the robot behaviours (body gestures) that should be performed as a reaction. None of the aforementioned datasets can be used for training the model that would be applicable to ASD therapy. However, they can be used for checking the feasibility of the DL architecture (e.g. MDQN) that can be further trained in the simulation or on the manually collected dataset. Unfortunately, only certain datasets are easily available online, namely: AIR-Act2Act, AUTH UAV Gesture, and NTU RGB+D.
 
@@ -308,9 +325,6 @@ Tasks belonging to each working package as well as related deliverables are pres
 	\end{longtable}
 }
 %Notes:
-% say that we try personalisation but the first shot is adaptation
-% summarise datasets in the table
-% change the gantt chart start - 1.03.2023
 % send the proposal to Prof.Ploeger, if he has comments, tell about alex, ask if its ok to ask Marta
 
 \subsection{Project Schedule}
